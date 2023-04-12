@@ -24,6 +24,7 @@ class ApiTool extends BaseTool {
     required this.method,
     this.headers,
     this.parser = _defaultApiResultParser,
+    super.inputFormat = 'must be a valid JSON string',
   });
 
   @override

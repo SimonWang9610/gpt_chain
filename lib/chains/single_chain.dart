@@ -12,6 +12,7 @@ import '../tools/base_tool.dart';
 import '../messages/base.dart';
 
 class SingleChain with MessageQueue, ChangeNotifier {
+  @override
   final HistoryContext history;
   final SystemContext system;
   final String apiKey;
@@ -34,7 +35,7 @@ class SingleChain with MessageQueue, ChangeNotifier {
   List<BaseTool> get tools => system.tools;
 
   @override
-  String get historyContext => '$system$history';
+  String get systemContext => '$system';
 
   bool _running = false;
   bool get running => _running;
@@ -68,7 +69,6 @@ class SingleChain with MessageQueue, ChangeNotifier {
       }
 
       if (aiMessage != null) {
-        history.add(_current!);
         history.add(aiMessage);
         _model.push(aiMessage);
       }
@@ -105,12 +105,15 @@ mixin MessageQueue {
 
     if (!msg.isIntermediate) {
       _current = msg;
+      history.add(_current!);
     }
 
     _model.push(msg);
 
     return msg;
   }
+
+  HistoryContext get history;
 
   AIMessage? serializeResponse(CompletionResponse response) {
     final output = response.choices.map((e) => e.body).join();
@@ -127,15 +130,20 @@ mixin MessageQueue {
     }
   }
 
-  String get historyContext;
+  String get systemContext;
 
   Future<AIMessage?> consume(HumanMessage message) async {
-    final content = await buildPromptFromMessage(message, historyContext);
+    final content = await buildPromptFromMessage(message, history.toString());
 
-    // Log.d('[content]: $content');
+    // Log.d('[system]: $systemContext');
+    Log.d('[content]: $content');
 
     final response = await CompletionTask.asyncChat(
       messages: [
+        {
+          'role': 'system',
+          'content': systemContext,
+        },
         {
           'role': 'user',
           'content': content,

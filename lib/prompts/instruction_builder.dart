@@ -24,12 +24,12 @@ Use this format if you ensure that your answer is the final answer.
   [your answer]
 </AI>
 **Option 2**
-Use this format if you need more information from tools.
+Using this format if you need more information from tools.
 <AI>
   <TOOL>
-    <NAME>[tool's name]</NAME> \\ MUST be one of the tools in <UTILITY></UTILITY> tag
+    <NAME>[tool's name]</NAME> \\ MUST be one of the tools in AVAILABLE TOOLS
     <ACTION>[the action you want this tool to execute]</ACTION>
-    <INPUT>[the input this tool could use]</INPUT>
+    <INPUT>[the input this tool could use]</INPUT> \\ MUST follow <FORMAT> of the tool if applicable
   </TOOL>
 </AI>
 $_delimiter

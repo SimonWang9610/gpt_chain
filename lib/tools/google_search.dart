@@ -40,7 +40,7 @@ class GoogleSearch extends ApiTool {
 
       final items = map['items'] as List<dynamic>;
 
-      return items.map((e) => e['title'] as String).join('\n');
+      return items.map((e) => e['pagemap'].toString()).join('\n');
     } catch (e) {
       Log.e('GoogleSearch exception', e.toString());
       return null;

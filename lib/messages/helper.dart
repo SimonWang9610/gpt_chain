@@ -33,7 +33,7 @@ class SerializedMessage {
         if (found.isNotEmpty) {
           return SerializedMessage(
             intermediateMessage: IntermediateMessage(
-              input ?? action ?? '',
+              action ?? input ?? '',
               tool: found.first,
             ),
           );
@@ -47,10 +47,13 @@ class SerializedMessage {
         index >= 0 ? output.substring(index + '<AI>'.length) : output;
 
     return SerializedMessage(
-      aiMessage: AIMessage(content),
+      aiMessage: AIMessage(content.trim()),
     );
   }
 }
+
+const _attention =
+    '(remember that your response MUST follow our FORMAT INSTRUCTIONS, and using AVAILABLE TOOLS if possible)';
 
 Future<String> buildPromptFromMessage(
     HumanMessage message, String history) async {
@@ -59,8 +62,7 @@ Future<String> buildPromptFromMessage(
   if (message is! IntermediateMessage) {
     buffer.write('The new message is: ${message.content}');
 
-    buffer.write(
-        '(remember that your response MUST follow our FORMAT INSTRUCTIONS)');
+    buffer.write(_attention);
     return buffer.toString();
   } else {
     final toolResult = await message.tool.run(message.content);
@@ -68,9 +70,6 @@ Future<String> buildPromptFromMessage(
     buffer.write(toolResult);
     buffer.write(
         'You may use the given result to respond to the last human message.');
-
-    buffer.write(
-        ' (remember that your response MUST follow our FORMAT INSTRUCTIONS)');
     return buffer.toString();
   }
 }
