@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/scheduler.dart';
 import 'package:gpt_chain/utils/utils.dart';
 import 'package:simple_http_api/simple_http_api.dart';
 
@@ -40,7 +41,17 @@ class GoogleSearch extends ApiTool {
 
       final items = map['items'] as List<dynamic>;
 
-      return items.map((e) => e['pagemap'].toString()).join('\n');
+      String result = '';
+
+      for (final item in items) {
+        final title = item['title'] as String?;
+        final link = item['link'] as String?;
+        final snippet = item['snippet'] as String?;
+
+        result += '(title: $title, link: $link, description: $snippet);';
+      }
+
+      return result;
     } catch (e) {
       Log.e('GoogleSearch exception', e.toString());
       return null;

@@ -73,12 +73,12 @@ class HumanMessageTile extends StatelessWidget {
         Flexible(
           flex: 2,
           child: Container(
-            padding: const EdgeInsets.all(5),
+            padding: const EdgeInsets.all(10),
             margin: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.circular(10),
-            ),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.black, width: 0.5)),
             child: Text(
               message.content,
               textAlign: TextAlign.start,
@@ -105,7 +105,11 @@ class AIMessageTile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const CircleAvatar(
-          child: Icon(Icons.settings_outlined),
+          backgroundColor: Colors.black,
+          child: Icon(
+            Icons.settings_outlined,
+            color: Colors.white,
+          ),
         ),
         const SizedBox(width: 10),
         Flexible(
