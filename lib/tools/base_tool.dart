@@ -19,7 +19,7 @@ abstract class BaseTool {
     } catch (e) {
       Log.e('Error: $e');
     }
-    return buildToolPrompt(input, result);
+    return _concateToolResults(input, result);
   }
 
   Future<String?> execute(String input);
@@ -36,5 +36,13 @@ abstract class BaseTool {
 
     buffer.writeln('</TOOL>');
     return buffer.toString();
+  }
+}
+
+String _concateToolResults(String input, [String? output]) {
+  if (output == null) {
+    return 'This tool did not return useful information for $input';
+  } else {
+    return 'This tool found: $output for $input';
   }
 }

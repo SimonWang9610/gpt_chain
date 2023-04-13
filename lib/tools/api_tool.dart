@@ -71,3 +71,20 @@ class ApiTool extends BaseTool {
     return response != null ? parser.call(response) : null;
   }
 }
+
+class SearchResult {
+  final String? title;
+  final String? link;
+  final String? snippet;
+
+  const SearchResult({
+    this.title,
+    this.link,
+    this.snippet,
+  });
+
+  @override
+  String toString() {
+    return 'SearchResult(title: $title, link: $link, snippet: $snippet)';
+  }
+}

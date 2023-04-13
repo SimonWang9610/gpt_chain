@@ -1,3 +1,5 @@
+import 'package:gpt_chain/utils/utils.dart';
+
 import '../tools/base_tool.dart';
 
 import 'ai.dart';
@@ -31,9 +33,13 @@ class SerializedMessage {
         final found = tools.where((element) => element.name == name);
 
         if (found.isNotEmpty) {
+          final content = action != null && input != null
+              ? '$action for $input'
+              : action ?? input ?? '';
+
           return SerializedMessage(
             intermediateMessage: IntermediateMessage(
-              action ?? input ?? '',
+              content,
               tool: found.first,
             ),
           );
@@ -66,6 +72,8 @@ Future<String> buildPromptFromMessage(
     return buffer.toString();
   } else {
     final toolResult = await message.tool.run(message.content);
+
+    Log.d('Tool result: $toolResult');
 
     buffer.write(toolResult);
     buffer.write(
